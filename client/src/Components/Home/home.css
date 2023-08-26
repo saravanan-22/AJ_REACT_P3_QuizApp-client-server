@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+    color: white;
+    
+}
+
+.aspect-ratio{
+    aspect-ratio: 4.6/2.5;
+}
+
+.main {
+    display : flex;
+    flex-wrap: wrap;
+}
