@@ -24,14 +24,17 @@ const Login = () => {
       .then((res) => {
         const fetchedUsers = res.data;
         const { data } = fetchedUsers;
-        data.find((user) => {
-          if (user.email === email && user.password === password) {
-            alert("login successful");
-            navigate("/");
-          } else {
-            setLoginError("email or password doesn't match");
-          }
-        });
+        const user = data.find(
+          (user) => user.email === email && user.password === password
+        );
+
+        if (user) {
+          localStorage.setItem("uid", user._id);
+          alert("Login successful");
+          navigate("/");
+        } else {
+          setLoginError("Email or password doesn't match");
+        }
       })
       .catch((err) => {
         console.error(err);

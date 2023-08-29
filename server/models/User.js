@@ -21,15 +21,15 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minLength: [6, "Password should have at least 6 characters"],
     },
-    age: {
-      type: Number,
-    },
     ph: {
       type: Number,
       required: true,
       trim: true,
       unique: true, 
     },
+    currentPoints: {
+      type: Number, 
+    }
   },
   {
     timestamps: true,

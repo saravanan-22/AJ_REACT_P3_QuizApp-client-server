@@ -17,13 +17,40 @@ export const createUser = (req, res) => {
 export const getAllUsers = (req, res) => {
   User.find()
     .then((users) =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "user created successfully",
-          data: users,
-        })
+      res.status(200).json({
+        success: true,
+        message: "get request process successfully",
+        data: users,
+      })
     )
     .catch((err) => res.status(400).json({ success: false, message: err }));
+};
+
+// updateGkQuizPoints------------------------------------------------------------
+
+export const updateCurrentPoints = (req, res) => {
+  const { id } = req.params;
+  const newData = req.body;
+  User.findByIdAndUpdate(id, {
+    currentPoints: newData.currentPoints,
+  })
+    .then((updatedCurrentPoints) =>
+      res.status(200).json({ success: true, data: updatedCurrentPoints })
+    )
+    .catch((err) => console.log(err));
+};
+
+// getSingleUserCurrentPoints----------------------------------------------------
+
+export const getSingleUserCurrentPoints = (req, res) => {
+  const { id } = req.params;
+  User.findById(id)
+    .then((user) =>
+      res.status(200).json({
+        success: true,
+        message: "get request process successfully",
+        data: user,
+      })
+    )
+    .catch((err) => console.log(err));
 };

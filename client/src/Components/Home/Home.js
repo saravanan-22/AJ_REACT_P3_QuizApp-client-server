@@ -18,8 +18,8 @@ const Home = () => {
   return (  
     <div>
       <Header />
-      <section style={{marginTop: "6em", marginBottom : "2em" }} className="cards">
-        <h1>If you want to play the game click above the image</h1>
+      <section style={{marginTop: "5em", marginBottom : "2em" }} className="cards">
+      <h4 style={{marginBottom : "2rem", textDecoration : "underline"}}>"Would you like to start the game? Click on the image."</h4>
         <Container>
           <Row className="mb-3">
             {/*-------------------------------------CARD-1----------------------------------------------------------------- */}

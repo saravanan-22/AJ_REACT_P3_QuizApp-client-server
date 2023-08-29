@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Auth/Login/Login";
-import SignUp from "./Auth/SignUp/SignUp";
+import Login from "./Components/Auth/Login/Login";
+import SignUp from "./Components/Auth/SignUp/SignUp";
 import ProfilePage from "./Components/ProfilePage/ProfilePage";
 import Home from "./Components/Home/Home";
 import ResetPassword from "./Components/ResetPassword/ResetPassword";
@@ -12,10 +12,12 @@ import Sports from "./Components/Sports/Sports";
 import History from "./Components/History/History";
 import Animals from "./Components/Animals/Animals";
 import Points from "./Components/Point/Points";
+import {Context} from "./Components/Context/Context";
 
 function App() {
   return (
     <div className="App">
+      <Context>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -32,6 +34,7 @@ function App() {
           <Route path="/Points" element={<Points/>} />
         </Routes>
       </Router>
+      </Context>
     </div>
   );
 }

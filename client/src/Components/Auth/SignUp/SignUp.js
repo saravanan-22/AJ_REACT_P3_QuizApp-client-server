@@ -27,7 +27,6 @@ const SignUp = () => {
         username: userName,
         email: email,
         password: password,
-        age: age,
         ph: phoneNumber,
       })
       .then(() => {

@@ -9,6 +9,9 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const reload = () => {
+    window.reload();
+  };
   return (
     <Navbar
       collapseOnSelect
@@ -27,15 +30,15 @@ const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>
           <Nav>
-          <Link to="/Points" className="me-2">
-              <Button variant="outline-dark">
-                <FaRegCircleUser/>
+            <Link to="/Points" className="me-2">
+              <Button variant="outline-dark" onClick={reload}>
+                <FaRegCircleUser />
                 <span> Points</span>
               </Button>{" "}
             </Link>
             <Link to="/ProfilePage" className="me-2">
               <Button variant="outline-dark">
-                <FaRegCircleUser/>
+                <FaRegCircleUser />
                 <span> Profile</span>
               </Button>{" "}
             </Link>
