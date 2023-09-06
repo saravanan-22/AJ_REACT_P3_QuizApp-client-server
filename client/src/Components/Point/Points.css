@@ -7,7 +7,7 @@
   }
   
   .points-table th, .points-table td {
-    border: 1px solid #000;
+    border: 1px solid #3700ff;
     padding: 5px;
     text-align: center;
     
@@ -15,7 +15,9 @@
   }
   
   .points-table th {
-    background-color:rgba(0, 0, 0, 0.75);
+    background-color:rgba(128, 126, 126, 0.6);
+
+
  
   }
   

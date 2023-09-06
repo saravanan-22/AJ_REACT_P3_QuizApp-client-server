@@ -10,24 +10,26 @@ import { useState } from "react";
 import axios from "axios";
 
 const SignUp = () => {
-  const [userName, setUserName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [age, setAge] = useState();
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [age, setAge] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   const [error, setError] = useState();
 
   const navigate = useNavigate();
 
   // submitBtn-----------------------------------------------------------------------------------------------------
   const handleCreate = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     axios
       .post("http://localhost:5000/api/v1/users/create", {
         username: userName,
         email: email,
         password: password,
         ph: phoneNumber,
+
       })
       .then(() => {
         alert("user created successfully");
@@ -35,25 +37,29 @@ const SignUp = () => {
       })
       .catch((err) => {
         console.log(err.message);
-       alert(err.message)
+        alert(err.message);
       });
   };
 
   return (
-    <Card style={{ width: "22rem", margin: "0 auto", padding: "0 1em" , marginTop : "1em"}}>
- 
-        <Card.Img variant="top" src={image} />
-     
+    <Card
+      style={{
+        width: "22rem",
+        margin: "0 auto",
+        padding: "0 1em",
+        marginTop: "1em",
+      }}
+    >
+      <Card.Img variant="top" src={image} />
+
       <Card.Body>
         <Card.Title>Register Your Account</Card.Title>
       </Card.Body>
       <>
         <Form className="d-grid" onSubmit={handleCreate}>
           <FloatingLabel
-            controlId="floatingInput"
             label="username"
             className="mb-2"
-          
           >
             <Form.Control
               type="text"
@@ -78,7 +84,7 @@ const SignUp = () => {
               style={{ textAlign: "start" }}
             />
           </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="Password">
+          <FloatingLabel  label="Password">
             <Form.Control
               type="password"
               placeholder="Password"
@@ -89,7 +95,7 @@ const SignUp = () => {
               style={{ textAlign: "start" }}
             />
           </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="age">
+          <FloatingLabel  label="age">
             <Form.Control
               type="number"
               placeholder="age"
@@ -100,7 +106,7 @@ const SignUp = () => {
               style={{ textAlign: "start" }}
             />
           </FloatingLabel>
-          <FloatingLabel controlId="floatingPhoneNumber" label="mobile number">
+          <FloatingLabel  label="mobile number">
             <Form.Control
               type="tel"
               placeholder="phoneNumber"

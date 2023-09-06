@@ -40,6 +40,20 @@ export const updateCurrentPoints = (req, res) => {
     .catch((err) => console.log(err));
 };
 
+// updatePreviousPoints------------------------------------------------------------
+
+export const updatePrePoints = (req, res) => {
+  const { id } = req.params;
+  const newData = req.body;
+  User.findByIdAndUpdate(id, {
+    previousPoint: newData.prevPoint,
+  })
+    .then((updatedPrePoints) =>
+      res.status(200).json({ success: true, data: updatedPrePoints })
+    )
+    .catch((err) => console.log(err.message));
+};
+
 // getSingleUserCurrentPoints----------------------------------------------------
 
 export const getSingleUserCurrentPoints = (req, res) => {
@@ -54,3 +68,51 @@ export const getSingleUserCurrentPoints = (req, res) => {
     )
     .catch((err) => console.log(err));
 };
+
+// updateTotalPoints------------------------------------------------------------
+
+export const updateTotalPoints = (req, res) => {
+  const { id } = req.params;
+  const newData = req.body;
+  User.findByIdAndUpdate(id, { totalPoints: newData.gkTotalPoints })
+    .then((updatedTotalPoints) =>
+      res.status(200).json({ success: true, data: updatedTotalPoints })
+    )
+    .catch((err) => console.log(err.message));
+};
+
+
+// get previousPoints----------------------------------------
+export const getPreviousPoints = (req, res) => {
+  const { id } = req.params;
+  User.findById(id)
+    .then((user) =>
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: "get request process successfully",
+          data: user,
+        })
+    )
+    .catch((err) => console.log(err));
+};
+
+
+
+// get totalPoints----------------------------------------
+export const getTotalPoints = (req, res) => {
+  const { id } = req.params;
+  User.findById(id)
+    .then((user) =>
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: "get request process successfully",
+          data: user,
+        })
+    )
+    .catch((err) => console.log(err));
+};
+

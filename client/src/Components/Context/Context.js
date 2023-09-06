@@ -7,6 +7,9 @@ export const CartContext = createContext();
 export const Context = ({ children }) => {
   const [Gk, setGk] = useState([]);
   const [currentPoints, setCurrentPoints] = useState([]);
+  const [userId, setUserId] = useState();
+  const [prevPoints, setPrevPoints] = useState([]);
+  const [totalPoints, setTotalPoints] = useState([]);
   const [loading, setLoading] = useState(true); // Add a loading state
 
   useEffect(() => {
@@ -22,10 +25,10 @@ export const Context = ({ children }) => {
         console.log(err.message);
         setLoading(false); // Set loading to false in case of an error
       });
-      
 
     //----------------------------------------------------------------------------------------------------------------
     const userId = localStorage.getItem("uid");
+    setUserId(userId)
     axios
       .get(`http://localhost:5000/api/v1/users/getCurrentPoints/${userId}`)
       .then((res) => {
@@ -36,11 +39,37 @@ export const Context = ({ children }) => {
       .catch((err) => {
         console.log(err.message);
       });
+
+    // getPrevious value------------------
+
+    axios
+      .get(
+        `http://localhost:5000/api/v1/users/getGkQuestions/previousPoints/${userId}`
+      )
+      .then((res) => {
+        const fetchedPrePoints = res.data;
+        const { data } = fetchedPrePoints;
+        setPrevPoints(data.previousPoint);    
+      })
+      .catch((err) => console.log(err));
+
+    // getTotalPoints value------------------
+
+    axios
+      .get(
+        `http://localhost:5000/api/v1/users/getGkQuestions/totalPoints/${userId}`
+      )
+      .then((res) => {
+        const fetchedPrePoints = res.data;
+        const { data } = fetchedPrePoints;
+        setTotalPoints(data.totalPoints);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   // Render children only if data is available, otherwise show a loading message
   return (
-    <CartContext.Provider value={{ Gk , currentPoints}}>
+    <CartContext.Provider value={{ Gk, currentPoints, prevPoints, totalPoints }}>
       <div style={{ position: "relative", minHeight: "100vh" }}>
         {loading ? (
           <div

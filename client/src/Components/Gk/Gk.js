@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useReducer } from "react";
+import React, { useEffect, useContext, useReducer, useState } from "react";
 import Header from "../Header/Header";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -21,6 +21,14 @@ const gkReducer = (state, action) => {
       return { ...state, timeRemaining: state.timeRemaining - 1 };
     case "SET_POINTS":
       return { ...state, points: action.payload };
+    case "SET_ANSWERED_CORRECTLY":
+      return { ...state, answeredCorrectly: action.payload };
+    case "SET_TOTAL_POINTS":
+      return { ...state, totalPoints: action.payload };
+    case "SET_POINTS_ARRAY":
+      return { ...state, pointsArray: action.payload };
+    case "SET_TOTAL_CURR":
+      return { ...state, totalCurrPoints: action.payload };
     default:
       return state;
   }
@@ -30,12 +38,23 @@ const initialState = {
   questions: [],
   selectedAnswer: [],
   currentQuestionIndex: 0,
-  timeRemaining: 120,
+  timeRemaining: 10,
   points: 0,
-  answeredCorrectly: [], // Initialize an empty array
+  pointsArray: [0],
+  answeredCorrectly: [],
+  totalPoints: 0,
+  totalCurrPoints: 0,
 };
 
+let currPointsArray = JSON.parse(localStorage.getItem("currPointsArray"));
+
+if (!currPointsArray) {
+  currPointsArray = [0];
+  localStorage.setItem("currPointsArray", JSON.stringify(currPointsArray));
+}
+
 const Gk = () => {
+  const [userId, setUserId] = useState();
   const [state, dispatch] = useReducer(gkReducer, initialState);
   const { Gk } = useContext(CartContext);
   const navigate = useNavigate();
@@ -44,27 +63,141 @@ const Gk = () => {
     dispatch({ type: "SET_QUESTIONS", payload: Gk });
   }, [Gk]);
 
-  // Function to handle next question
+  useEffect(() => {
+    let timer;
+    const updateTimer = () => {
+      if (state.timeRemaining > 0) {
+        timer = setTimeout(() => {
+          dispatch({ type: "DECREASE_TIMER" });
+        }, 1000);
+      } else {
+        window.location.reload(navigate("/"))
+        
+
+        // Push the current points into the array
+        currPointsArray.push(state.totalCurrPoints);
+        console.log(currPointsArray);
+        localStorage.setItem(
+          "currPointsArray",
+          JSON.stringify(currPointsArray)
+        );
+        const totalLength = currPointsArray.length;
+        console.log(totalLength);
+        const exactLength = totalLength > 2 ? `${totalLength - Number(2)}` : 0;
+        const preValues = currPointsArray[exactLength];
+        console.log(preValues);
+
+        // update previous value in db-------------------
+        axios
+          .put(
+            `http://localhost:5000/api/v1/users/updateGkQuestions/previousPoints/${userId}`,
+            {
+              prevPoint: preValues,
+            }
+          )
+          .then((res) => console.log("previous point updated successfully"))
+          .catch((err) => console.log(err));
+
+        // update totalPoints in db--------------------------
+        const totalValue = currPointsArray.reduce(
+          (accumulator, currentValue) => {
+            return accumulator + currentValue;
+          },
+          0
+        );
+        console.log(totalValue);
+        axios
+          .put(
+            `http://localhost:5000/api/v1/users/updateGKQuestions/totalPoints/${userId}`,
+            { 
+              gkTotalPoints: totalValue,
+            }
+          )
+          .then((res) => console.log("totalPoints updated successfully"))
+          .catch((err) => console.log(err));
+      }
+    };
+
+    updateTimer();
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [state.timeRemaining]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds
+    ).padStart(2, "0")}`;
+  };
+
+  const handleSelectAnswer = (answer) => {
+    const currentQuestion = state.questions[state.currentQuestionIndex];
+
+    if (currentQuestion) {
+      if (answer === currentQuestion.correct_answer) {
+        if (!state.answeredCorrectly[state.currentQuestionIndex]) {
+          const updatedPoints = state.points + 1;
+
+          // Update the points for the current question in pointsArray
+          const updatedPointsArray = [...state.pointsArray];
+          updatedPointsArray[state.currentQuestionIndex] = updatedPoints;
+
+          dispatch({ type: "SET_POINTS", payload: updatedPoints });
+          dispatch({ type: "SET_POINTS_ARRAY", payload: updatedPointsArray });
+          const totalCurrPoints = updatedPointsArray.length;
+          console.log(totalCurrPoints);
+          dispatch({ type: "SET_TOTAL_CURR", payload: totalCurrPoints });
+          const updatedAnsweredCorrectly = [...state.answeredCorrectly];
+          updatedAnsweredCorrectly[state.currentQuestionIndex] = true;
+
+          dispatch({
+            type: "SET_ANSWERED_CORRECTLY",
+            payload: updatedAnsweredCorrectly,
+          });
+
+          // Update total points
+          const addPoints = state.points + 1;
+          dispatch({ type: "SET_TOTAL_POINTS", payload: addPoints });
+          const userId = localStorage.getItem("uid");
+          setUserId(userId);
+          axios
+            .put(
+              `http://localhost:5000/api/v1/users/updateCurrentPoints/${userId}`,
+              {
+                currentPoints: updatedPoints,
+              }
+            )
+            .then((response) => {
+              console.log("Points updated successfully");
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      }
+    }
+
+    const updatedSelectedAnswer = [...state.selectedAnswer];
+    updatedSelectedAnswer[state.currentQuestionIndex] = answer;
+
+    dispatch({
+      type: "SET_SELECTED_ANSWER",
+      payload: updatedSelectedAnswer,
+    });
+  };
+
   const handleNextQuestion = () => {
-    // Check if there are more questions
     if (state.currentQuestionIndex < state.questions.length - 1) {
-      // Move to the next question
       dispatch({
         type: "SET_CURRENT_QUESTION_INDEX",
         payload: state.currentQuestionIndex + 1,
       });
     } else {
-      navigate("/quiz-completed"); // Navigate to a quiz completion page
+      navigate("/");
     }
-    const userId = localStorage.getItem("uid");
-    axios
-      .put(`http://localhost:5000/api/v1/users/updateCurrentPoints/${userId}`, {
-        currentPoints: state.points,
-      })
-      .then()
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const handlePreviousQuestion = () => {
@@ -76,75 +209,12 @@ const Gk = () => {
     }
   };
 
-  // useEffect to start and update the timer
-  useEffect(() => {
-    let timer;
-    const updateTimer = () => {
-      if (state.timeRemaining > 0) {
-        timer = setTimeout(() => {
-          dispatch({ type: "DECREASE_TIMER" });
-        }, 1000); // Decrease timeRemaining every second (1000 milliseconds)
-      } else {
-        // Timer has completed, redirect to home
-        navigate("/");
-      }
-    };
-
-    updateTimer();
-
-    return () => {
-      clearTimeout(timer); // Clear the timer when the component unmounts
-    };
-  }, [state.timeRemaining]);
-
-  // Function to format time as minutes and seconds
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(
-      remainingSeconds
-    ).padStart(2, "0")}`;
-  };
-
-  // Function to handle selecting an answer
-  const handleSelectAnswer = (answer) => {
-    const currentQuestion = state.questions[state.currentQuestionIndex];
-
-    if (currentQuestion) {
-      if (answer === currentQuestion.correct_answer) {
-        // Check if the question has not been answered correctly before
-        if (!state.answeredCorrectly[state.currentQuestionIndex]) {
-          // Increment points if the answer is correct
-          dispatch({ type: "SET_POINTS", payload: state.points + 1 });
-
-          // Set the flag to true to indicate that this question has been answered correctly
-          const updatedAnsweredCorrectly = [...state.answeredCorrectly];
-          updatedAnsweredCorrectly[state.currentQuestionIndex] = true;
-
-          dispatch({
-            type: "SET_ANSWERED_CORRECTLY",
-            payload: updatedAnsweredCorrectly,
-          });
-        }
-      }
-    }
-
-    // Create a new array with the selected answer for the current question
-    const updatedSelectedAnswer = [...state.selectedAnswer];
-    updatedSelectedAnswer[state.currentQuestionIndex] = answer;
-
-    dispatch({
-      type: "SET_SELECTED_ANSWER",
-      payload: updatedSelectedAnswer,
-    });
-  };
-
   return (
     <div>
       <Header />
       <section style={{ marginTop: "6em" }}>
         <h5 style={{ textAlign: "end", margin: "0", marginRight: "52px" }}>
-          Timer : {formatTime(state.timeRemaining)}
+          Timer: {formatTime(state.timeRemaining)}
         </h5>
         {state.questions.map((gkQuestion, index) => (
           <div
@@ -262,13 +332,13 @@ const Gk = () => {
             </Button>
           )}
         </div>
-        <h6 className="text-start ms-5">POINTS : {state.points}</h6>
+        <h6 className="text-start ms-5">POINTS: {state.points}</h6>
         <h6 className="text-start ms-5">
-          Selected Answer :{" "}
+          Selected Answer:{" "}
           {state.selectedAnswer[state.currentQuestionIndex] || "Not Selected"}
         </h6>
         <h6 className="text-start ms-5">
-           Questions No : {state.currentQuestionIndex}
+          Questions No: {state.currentQuestionIndex}
         </h6>
       </section>
     </div>

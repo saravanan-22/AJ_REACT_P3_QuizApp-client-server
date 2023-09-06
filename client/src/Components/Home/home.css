@@ -1,15 +1,17 @@
-body {
-    background-color: black;
+.text-animation {
+    font-size: 24px;
+    animation: text-fade 1.5s ease-in-out infinite;
     color: white;
-    
-}
+  }
+  
+  @keyframes text-fade {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
 
-.aspect-ratio{
-    aspect-ratio: 4.6/2.5;
-}
-
-.main {
-    display : flex;
-    flex-wrap: wrap;
-}
-
+ 

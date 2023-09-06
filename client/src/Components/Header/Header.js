@@ -6,18 +6,18 @@ import image from "../images/logo.svg.png";
 import Button from "react-bootstrap/esm/Button";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useRouteLoaderData } from "react-router-dom";
 
 const Header = () => {
+  const navigation = useNavigate()
   const reload = () => {
-    window.reload();
+    window.location.reload(navigation("/Points"))
   };
   return (
     <Navbar
       collapseOnSelect
       expand="lg"
-      className="bg-body-tertiary "
-      style={{ position: "fixed", top: "0", zIndex: "100", width: "100%" }}
+      style={{ position: "fixed", top: "0", zIndex: "100", width: "100%" , backgroundColor: "rgba(128, 126, 126, 0.6)"}}
     >
       <Container fluid>
         <Navbar.Brand href="">
@@ -30,14 +30,8 @@ const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>
           <Nav>
-            <Link to="/Points" className="me-2">
-              <Button variant="outline-dark" onClick={reload}>
-                <FaRegCircleUser />
-                <span> Points</span>
-              </Button>{" "}
-            </Link>
             <Link to="/ProfilePage" className="me-2">
-              <Button variant="outline-dark">
+              <Button variant="outline-light">
                 <FaRegCircleUser />
                 <span> Profile</span>
               </Button>{" "}

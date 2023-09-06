@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
       minLength: [3, "Username should have at least 3 characters"],
     },
     email: {
-      type: String,
+      type: String, 
       required: true,
       unique: true, 
       trim: true,
@@ -24,17 +24,21 @@ const userSchema = new mongoose.Schema(
     ph: {
       type: Number,
       required: true,
-      trim: true,
-      unique: true, 
     },
     currentPoints: {
       type: Number, 
-    }
+    },
+    previousPoint: {
+      type: Number, 
+    },
+    totalPoints: {
+      type: Number, 
+    },
   },
   {
     timestamps: true,
   }
-);
+);  
 
 const User = mongoose.model("User", userSchema);
 
