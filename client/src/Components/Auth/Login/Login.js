@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
 import { useState } from "react";
 import axios from "axios";
+import background from "../../images/login_background.jpg";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,7 +32,7 @@ const Login = () => {
         if (user) {
           localStorage.setItem("uid", user._id);
           alert("Login successful");
-          navigate("/");
+          window.location.reload(navigate("/Home"));
         } else {
           setLoginError("Email or password doesn't match");
         }
@@ -43,13 +44,25 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url(${background})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "end",
+      }}
+    >
       <Card
         style={{
           width: "21rem",
           margin: "0 auto",
           padding: "1em",
-          marginTop: "4.5em",
+          marginBottom: "4.5em",
+          backgroundColor : "rgb(241, 241, 241)"
         }}
       >
         <Card.Img variant="top" src={image} />
@@ -91,7 +104,7 @@ const Login = () => {
         </>
         <Card.Body>
           <h6>
-            user credentials! <Link to="/">login</Link>
+            user credentials! <Link to="/Home">login</Link>
           </h6>
           <h6>
             Don't have an account? <Link to="/SignUp">Sign up</Link>

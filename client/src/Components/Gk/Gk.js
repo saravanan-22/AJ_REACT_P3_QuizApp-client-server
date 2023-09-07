@@ -46,11 +46,13 @@ const initialState = {
   totalCurrPoints: 0,
 };
 
-let currPointsArray = JSON.parse(localStorage.getItem("currPointsArray"));
+const userId = localStorage.getItem("uid");
+const userSpecificStorageKey = `currPointsArray_${userId}`;
+let currPointsArray = JSON.parse(localStorage.getItem(userSpecificStorageKey));
 
 if (!currPointsArray) {
   currPointsArray = [0];
-  localStorage.setItem("currPointsArray", JSON.stringify(currPointsArray));
+  localStorage.setItem(userSpecificStorageKey, JSON.stringify(currPointsArray));
 }
 
 const Gk = () => {
@@ -71,16 +73,15 @@ const Gk = () => {
           dispatch({ type: "DECREASE_TIMER" });
         }, 1000);
       } else {
-        window.location.reload(navigate("/"))
-        
+        window.location.reload(navigate("/Home"));
 
         // Push the current points into the array
         currPointsArray.push(state.totalCurrPoints);
         console.log(currPointsArray);
         localStorage.setItem(
-          "currPointsArray",
+          userSpecificStorageKey,
           JSON.stringify(currPointsArray)
-        );
+        ); // Use the user-specific key
         const totalLength = currPointsArray.length;
         console.log(totalLength);
         const exactLength = totalLength > 2 ? `${totalLength - Number(2)}` : 0;
@@ -109,7 +110,7 @@ const Gk = () => {
         axios
           .put(
             `http://localhost:5000/api/v1/users/updateGKQuestions/totalPoints/${userId}`,
-            { 
+            {
               gkTotalPoints: totalValue,
             }
           )

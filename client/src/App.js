@@ -20,8 +20,8 @@ function App() {
       <Context>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/ProfilePage" element={<ProfilePage />} />
           <Route path="ResetPassword" element={<ResetPassword />} />

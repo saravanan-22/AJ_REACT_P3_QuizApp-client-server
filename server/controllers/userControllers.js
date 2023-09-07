@@ -10,10 +10,15 @@ export const createUser = (req, res) => {
         data: user,
       })
     )
-    .catch((err) => res.status(400).json({ success: false, message: err }));
+    .catch((err) =>
+      res.status(400).json({
+        success: false,
+        message: `Failed to create user: ${err.message}`,
+        error: err, // Optionally include the full error object for debugging
+      })
+    );
 };
-
-// getAllUsers------------------------------------------------------------------
+// // getAllUsers------------------------------------------------------------------
 export const getAllUsers = (req, res) => {
   User.find()
     .then((users) =>

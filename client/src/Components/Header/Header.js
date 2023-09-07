@@ -22,7 +22,7 @@ const Header = () => {
       <Container fluid>
         <Navbar.Brand href="">
           {" "}
-          <Link to="/">
+          <Link to="/Home">
             <img src={image} alt="logo" width="100px" />
           </Link>{" "}
         </Navbar.Brand>
