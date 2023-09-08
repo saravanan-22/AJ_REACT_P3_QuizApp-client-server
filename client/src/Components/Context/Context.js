@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
+import loadingImage from "../images/loading.jpg";
+import "./Context.css"
+
 
 export const CartContext = createContext();
 
@@ -10,7 +13,8 @@ export const Context = ({ children }) => {
   const [userId, setUserId] = useState();
   const [prevPoints, setPrevPoints] = useState([]);
   const [totalPoints, setTotalPoints] = useState([]);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true); 
+  const [singleUserDetails, setSingleUserDetails] = useState([])
 
   useEffect(() => {
     axios
@@ -62,6 +66,7 @@ export const Context = ({ children }) => {
       .then((res) => {
         const fetchedPrePoints = res.data;
         const { data } = fetchedPrePoints;
+        setSingleUserDetails(data)
         setTotalPoints(data.totalPoints);
       })
       .catch((err) => console.log(err));
@@ -69,29 +74,42 @@ export const Context = ({ children }) => {
 
   // Render children only if data is available, otherwise show a loading message
   return (
-    <CartContext.Provider value={{ Gk, currentPoints, prevPoints, totalPoints }}>
+    <CartContext.Provider value={{ Gk, currentPoints, prevPoints, totalPoints , singleUserDetails,setSingleUserDetails}}>
       <div style={{ position: "relative", minHeight: "100vh" }}>
-        {loading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: "100%",
-              position: "absolute",
-              top: "0",
-              left: "0",
-              width: "100%",
-              backgroundColor: "rgba(255, 255, 255, 0.5)",
-              zIndex: "9999",
-            }}
-          >
-            <Spinner animation="border" variant="secondary" />
-            <p className="ms-2 mt-2">Loading...</p>
-          </div>
-        ) : (
-          children
-        )}
+      {loading ? (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      minHeight: "100%",
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100%",
+      backgroundImage: `url(${loadingImage})`, 
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "top",
+      zIndex: "9999",
+    }}
+  >
+    <Spinner animation="border" variant="secondary" />
+    <p
+      style={{
+        color: "#ffffff", 
+        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+        padding: "10px", 
+        borderRadius: "5px", 
+      }}
+      className="ms-2 mt-2"
+    >
+      Loading<span className="loading-dots">...</span> 
+    </p>
+  </div>
+) : (
+  children
+)}
       </div>
     </CartContext.Provider>
   );

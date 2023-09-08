@@ -9,6 +9,7 @@ import {
   updateTotalPoints,
   getPreviousPoints,
   getTotalPoints,
+  updateUserData,
 } from "../controllers/userControllers.js";
 
 // CreateUser -POST http://localhost:5000/api/v1/user/create
@@ -35,5 +36,7 @@ router.get("/getGkQuestions/previousPoints/:id", getPreviousPoints);
 //GET - http://localhost:5000/api/v1/users/getGkQuestions/totalPoints/:id
 router.get("/getGkQuestions/totalPoints/:id", getTotalPoints);
 
-export default router;
-    
+//PUT - http://localhost:5000/api/v1/users/editedUserData/:id
+router.put("/editedUserData/singleUser/:id", updateUserData);
+
+export default router;  

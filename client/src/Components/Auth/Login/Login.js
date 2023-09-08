@@ -43,6 +43,12 @@ const Login = () => {
       });
   };
 
+  const setDefaultValues = (e) => {
+    e.preventDefault();
+    setEmail("saravanan@gmail.com")
+    setPassword("12345678")
+  };
+
   return (
     <div
       style={{
@@ -62,7 +68,7 @@ const Login = () => {
           margin: "0 auto",
           padding: "1em",
           marginBottom: "4.5em",
-          backgroundColor : "rgb(241, 241, 241)"
+          backgroundColor: "rgb(241, 241, 241)",
         }}
       >
         <Card.Img variant="top" src={image} />
@@ -104,7 +110,15 @@ const Login = () => {
         </>
         <Card.Body>
           <h6>
-            user credentials! <Link to="/Home">login</Link>
+            user credentials!{" "}
+            <Button
+              variant="outline-dark"
+              size="sm"
+              style={{ textDecoration: "underline" }}
+              onClick={setDefaultValues}
+            >
+              Login
+            </Button>
           </h6>
           <h6>
             Don't have an account? <Link to="/SignUp">Sign up</Link>

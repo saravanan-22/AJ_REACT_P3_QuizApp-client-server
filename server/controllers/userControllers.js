@@ -86,38 +86,52 @@ export const updateTotalPoints = (req, res) => {
     .catch((err) => console.log(err.message));
 };
 
-
 // get previousPoints----------------------------------------
 export const getPreviousPoints = (req, res) => {
   const { id } = req.params;
   User.findById(id)
     .then((user) =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "get request process successfully",
-          data: user,
-        })
+      res.status(200).json({
+        success: true,
+        message: "get request process successfully",
+        data: user,
+      })
     )
     .catch((err) => console.log(err));
 };
-
-
 
 // get totalPoints----------------------------------------
 export const getTotalPoints = (req, res) => {
   const { id } = req.params;
   User.findById(id)
     .then((user) =>
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "get request process successfully",
-          data: user,
-        })
+      res.status(200).json({
+        success: true,
+        message: "get request process successfully",
+        data: user,
+      })
     )
     .catch((err) => console.log(err));
 };
 
+// put updateEditedUserDat---------------------------------------
+export const updateUserData = (req, res) => {
+  const { id } = req.params;
+  const newData = req.body;
+  User.findByIdAndUpdate(id, {
+    username: newData.username,
+    email: newData.email,
+    password: newData.password,
+    ph: newData.ph,
+  })
+    .then((updatedData) =>
+      res.status(200).json({ success: true, data: updatedData })
+    )
+    .catch((err) =>
+      res.status(400).json({
+        success: false,
+        message: `Failed to create user: ${err.message}`,
+        error: err, // Optionally include the full error object for debugging
+      })
+    );
+};

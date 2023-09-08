@@ -106,7 +106,7 @@ const Gk = () => {
           },
           0
         );
-        console.log(totalValue);
+  
         axios
           .put(
             `http://localhost:5000/api/v1/users/updateGKQuestions/totalPoints/${userId}`,
@@ -209,6 +209,7 @@ const Gk = () => {
       });
     }
   };
+  
 
   return (
     <div>
