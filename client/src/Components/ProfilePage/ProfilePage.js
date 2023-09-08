@@ -203,6 +203,7 @@ const ProfilePage = () => {
                     value={editedPhoneNumber}
                     onChange={(e) => setEditedPhoneNumber(e.target.value)}
                     required
+                    disabled
                     style={{
                       display: "inline-block",
                       width: "70%",

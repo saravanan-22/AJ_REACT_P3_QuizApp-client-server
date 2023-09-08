@@ -10,6 +10,7 @@ import {
   getPreviousPoints,
   getTotalPoints,
   updateUserData,
+  updatePassword,
 } from "../controllers/userControllers.js";
 
 // CreateUser -POST http://localhost:5000/api/v1/user/create
@@ -39,4 +40,7 @@ router.get("/getGkQuestions/totalPoints/:id", getTotalPoints);
 //PUT - http://localhost:5000/api/v1/users/editedUserData/:id
 router.put("/editedUserData/singleUser/:id", updateUserData);
 
-export default router;  
+//PATCH -http://localhost:5000/api/v1/users/forgotPassword/:id
+router.patch("/forgotPassword/:id", updatePassword);
+
+export default router;

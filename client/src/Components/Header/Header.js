@@ -36,7 +36,7 @@ const Header = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto"></Nav>
           <Nav>
-            <Button variant="outline-light" style={{width : "12%" , margin : "auto"}} onClick={handleProfileClick}>
+            <Button variant="outline-light" style={{margin : "auto"}} onClick={handleProfileClick}>
               <FaRegCircleUser />
               <span> Profile</span>
             </Button>{" "}

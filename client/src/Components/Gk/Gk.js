@@ -8,6 +8,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { CartContext } from "../Context/Context";
 import { useNavigate } from "react-router-dom";
+import image from "../images/quiz.jpg";
 
 const gkReducer = (state, action) => {
   switch (action.type) {
@@ -106,7 +107,7 @@ const Gk = () => {
           },
           0
         );
-  
+
         axios
           .put(
             `http://localhost:5000/api/v1/users/updateGKQuestions/totalPoints/${userId}`,
@@ -209,13 +210,23 @@ const Gk = () => {
       });
     }
   };
-  
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url(${image})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
       <Header />
-      <section style={{ marginTop: "6em" }}>
-        <h5 style={{ textAlign: "end", margin: "0", marginRight: "52px" }}>
+      <section style={{ marginTop: "6em" ,}}>
+        <h5 style={{ textAlign: "end", margin: "0", marginRight: "52px" , color :"red"}}>
           Timer: {formatTime(state.timeRemaining)}
         </h5>
         {state.questions.map((gkQuestion, index) => (
@@ -225,10 +236,10 @@ const Gk = () => {
               display: index === state.currentQuestionIndex ? "block" : "none",
             }}
           >
-            <Card className="text-center mx-5 mb-2 transparent-card">
-              <Card.Header>{gkQuestion.category}</Card.Header>
+            <Card className="text-center mx-5 mb-2 transparent-card" style={{backgroundColor : "white"}}>
+              <Card.Header style={{backgroundColor : "rgb(55, 134, 158)"}}>{gkQuestion.category}</Card.Header>
               <Card.Body>
-                <Card.Title className="mb-3">
+                <Card.Title className="mb-3" >
                   QUESTION : {gkQuestion.question}
                 </Card.Title>
                 <Row className="mb-2">
@@ -312,7 +323,7 @@ const Gk = () => {
                   </Col>
                 </Row>
               </Card.Body>
-              <Card.Footer className="text-muted">
+              <Card.Footer className="text-muted" style={{backgroundColor : "rgb(55, 134, 158)"}}>
                 {gkQuestion.questionType}
               </Card.Footer>
             </Card>
@@ -322,24 +333,24 @@ const Gk = () => {
           {state.currentQuestionIndex > 0 && (
             <Button
               onClick={handlePreviousQuestion}
-              variant="primary"
+              variant="outline-primary"
               className="me-2"
             >
               Previous Question
             </Button>
           )}
           {state.currentQuestionIndex < state.questions.length - 1 && (
-            <Button onClick={handleNextQuestion} variant="primary">
+            <Button onClick={handleNextQuestion}  variant="outline-success">
               Next Question
             </Button>
           )}
         </div>
-        <h6 className="text-start ms-5">POINTS: {state.points}</h6>
-        <h6 className="text-start ms-5">
+        <h6 className="text-start ms-5" style ={{color : "rgb(246, 222, 100)"}}>POINTS: {state.points}</h6>
+        <h6 className="text-start ms-5" style ={{color : "rgb(55, 134, 158)"}}>
           Selected Answer:{" "}
           {state.selectedAnswer[state.currentQuestionIndex] || "Not Selected"}
         </h6>
-        <h6 className="text-start ms-5">
+        <h6 className="text-start ms-5" style ={{color : "rgb(246, 222, 100)"}}>
           Questions No: {state.currentQuestionIndex}
         </h6>
       </section>

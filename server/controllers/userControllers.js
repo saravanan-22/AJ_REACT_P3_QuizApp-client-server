@@ -135,3 +135,18 @@ export const updateUserData = (req, res) => {
       })
     );
 };
+
+// Patch updatePassword data only-------------------------------
+export const updatePassword = (req, res) => {
+  const { id } = req.params;
+  const newPassword = req.body;
+  User.findByIdAndUpdate(id, { password: newPassword.password })
+    .then((updatedPassword) => res.status(200).json({success : true , data : updatedPassword}))
+    .catch((err) =>
+    res.status(400).json({
+      success: false,
+      message: `Failed to create user: ${err.message}`,
+      error: err, // Optionally include the full error object for debugging
+    })
+  );
+};

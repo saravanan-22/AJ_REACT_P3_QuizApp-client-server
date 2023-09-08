@@ -46,7 +46,7 @@ const Login = () => {
   const setDefaultValues = (e) => {
     e.preventDefault();
     setEmail("saravanan@gmail.com")
-    setPassword("12345678")
+    setPassword("1234567")
   };
 
   return (
